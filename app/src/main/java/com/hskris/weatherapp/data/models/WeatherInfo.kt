@@ -1,4 +1,4 @@
-package com.hskris.weatherapp.models
+package com.hskris.weatherapp.data.models
 
 import java.util.*
 
