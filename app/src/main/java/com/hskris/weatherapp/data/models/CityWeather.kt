@@ -1,9 +1,10 @@
 package com.hskris.weatherapp.data.models
 
-import java.util.*
+class CityWeather(private val id: Int, val name: String, val country: String) {
 
-class CityWeather(val name: String, val country: String, val timezone: TimeZone) {
+    private val forecasts: MutableList<Forecast> = mutableListOf()
 
-    private var weatherInfos: List<WeatherInfo> = emptyList<WeatherInfo>()
-
+    fun addForecasts(forecast: Forecast){
+        forecasts.add(forecast)
+    }
 }
