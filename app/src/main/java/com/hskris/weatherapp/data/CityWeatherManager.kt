@@ -13,40 +13,36 @@ class CityWeatherManager {
     private val cityId = listOf(1642911, 1277333)
     private val api = Api.getInstance()
 
-    val cityWeathers: MutableList<CityWeather> = mutableListOf()
-
-    fun fetchAllCityWeathers(){
-        for(id in cityId){
-            val result = api.getByCityId(1642911)
-            result.enqueue(object: Callback<CityWeather> {
-                override fun onFailure(call: Call<CityWeather>, t: Throwable) {
-                    Log.d("CityWeatherManager", "Error: $t")
-                }
-
-                override fun onResponse(call: Call<CityWeather>, response: Response<CityWeather>) {
-                    cityWeathers.add(response.body()!!)
-                }
-
-            })
-        }
-    }
-
-    fun getFiveDaysForecast(id: Int){
-        for(cw in cityWeathers){
-            if(cw.getId() == id){
-                val forecasts = cw.getForecasts()
-
-                val selectedForecast = mutableListOf<Forecast>()
-                for(i in 0..4){
-                    val index = i * 8
-                    if(index < forecasts.size)
-                        selectedForecast.add(forecasts[index])
-                }
-
+    fun fetchCityWeathers(id: Int, callback: ForecastCallback){
+        val result = api.getByCityId(id)
+        result.enqueue(object : Callback<CityWeather> {
+            override fun onFailure(call: Call<CityWeather>, t: Throwable) {
+                Log.d("CityWeatherManager", "Error: ${t.message}")
             }
-        }
+
+            override fun onResponse(call: Call<CityWeather>, response: Response<CityWeather>) {
+                val result = getFiveDaysForecast(response.body()!!)
+                callback.onGetForecast(result)
+            }
+
+        })
     }
 
+    fun getFiveDaysForecast(cityWeather: CityWeather): List<Forecast>{
 
+        val forecasts = cityWeather.getForecasts()
 
+        val selectedForecast = mutableListOf<Forecast>()
+        for (i in 0..4) {
+            val index = i * 8
+            if (index < forecasts.size)
+                selectedForecast.add(forecasts[index])
+        }
+
+        return selectedForecast
+    }
+}
+
+interface ForecastCallback {
+    fun onGetForecast(forecasts: List<Forecast>)
 }
