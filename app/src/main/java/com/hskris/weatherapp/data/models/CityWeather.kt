@@ -11,4 +11,8 @@ class CityWeather(private val id: Int, val name: String, val country: String) {
     fun addForecasts(forecast: Forecast){
         forecasts.add(forecast)
     }
+
+    fun getForecasts(): List<Forecast> {
+        return forecasts
+    }
 }
