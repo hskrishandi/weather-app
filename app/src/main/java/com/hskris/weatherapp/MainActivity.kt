@@ -8,24 +8,32 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hskris.weatherapp.data.CityWeatherManager
+import com.hskris.weatherapp.data.ForecastCallback
+import com.hskris.weatherapp.data.models.CityWeather
 import com.hskris.weatherapp.data.models.Forecast
 import kotlinx.android.synthetic.main.activity_main.*
 import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
+    private val manager = CityWeatherManager()
+    var weathers: MutableList<CityWeather> = mutableListOf()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val weathers = listOf(
-            Forecast(Date(1562263200000), 29.6, 75, "Rain", "Light rain"),
-            Forecast(Date(1562349600000), 30.2, 75, "Rain", "Clear"),
-            Forecast(Date(1562436000000), 22.5, 75, "Rain", "Overcast")
-        )
-
         recyclerViewForecast.layoutManager = LinearLayoutManager(this)
-        recyclerViewForecast.adapter = ForecastAdapter(weathers)
+        manager.fetchCityWeathers(1642911, object: ForecastCallback{
+            override fun onGetForecast(forecasts: List<Forecast>) {
+                val city = CityWeather(1642911, "Jakarta", "ID")
+                city.addForecasts(forecasts)
+                weathers.add(city)
+
+                recyclerViewForecast.adapter = ForecastAdapter(forecasts)
+            }
+        })
     }
 }
 
@@ -52,7 +60,7 @@ class ForecastAdapter(val items: List<Forecast>) : RecyclerView.Adapter<Forecast
         calendar.setTime(date)
         holder.day.text = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US)?.toString()
 
-        val temp = item.temp.toInt().toString() + " C"
+        val temp = (item.temp.toInt() - 273).toString() + " C"
         holder.temp.text = temp
 
         holder.desc.text = item.description
