@@ -37,7 +37,7 @@ class ForecastDeserializer : JsonDeserializer<CityWeather> {
             val weather = weatherJson.get("main").asString
             val description = weatherJson.get("description").asString
 
-            val forecast = Forecast(Date(date), temp, humidity, weather, description)
+            val forecast = Forecast(Date(date * 1000), temp, humidity, weather, description)
 
             cityWeather.addForecasts(forecast)
         }
