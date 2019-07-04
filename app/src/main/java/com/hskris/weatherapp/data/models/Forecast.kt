@@ -2,10 +2,10 @@ package com.hskris.weatherapp.data.models
 
 import java.util.*
 
-data class WeatherInfo(
-    var date: Date?,
-    var temp: Double,
-    var humidity: Int,
-    var weather: String,
-    var description: String
+data class Forecast(
+    val date: Date?,
+    val temp: Double,
+    val humidity: Int,
+    val weather: String,
+    val description: String
 )
