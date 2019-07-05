@@ -12,17 +12,17 @@ import com.hskris.weatherapp.data.CityWeatherManager
 import com.hskris.weatherapp.data.ForecastCallback
 import com.hskris.weatherapp.data.models.CityWeather
 import com.hskris.weatherapp.data.models.Forecast
-import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.activity_forecast.*
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class ForecastActivity : AppCompatActivity() {
 
     private val manager = CityWeatherManager()
     var weathers: MutableList<CityWeather> = mutableListOf()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_forecast)
 
         supportActionBar?.hide()
 
