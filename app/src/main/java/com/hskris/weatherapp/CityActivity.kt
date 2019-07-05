@@ -19,18 +19,17 @@ class CityActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_city)
 
-        val items = listOf(
-            City(1642911, "Jakarta"),
-            City(1277333, "Bangalore")
-        )
-
         recyclerViewChooseCity.layoutManager = LinearLayoutManager(this)
-        recyclerViewChooseCity.adapter = CityAdapter(items)
+        recyclerViewChooseCity.adapter = CityAdapter(cityItems)
 
     }
 
     companion object {
         val CITY_KEY = "CITY_KEY"
+        val cityItems = listOf(
+            City(1642911, "Jakarta"),
+            City(1277333, "Bangalore")
+        )
     }
 }
 
@@ -48,7 +47,7 @@ class CityAdapter(val items: List<City>) : RecyclerView.Adapter<CityAdapter.City
 
         holder.itemView.setOnClickListener{
             val intent = Intent()
-            intent.putExtra(CityActivity.CITY_KEY, items[position].id)
+            intent.putExtra(CityActivity.CITY_KEY, items[position])
 
             val activity = holder.itemView.context as Activity
             activity.setResult(Activity.RESULT_OK, intent)
