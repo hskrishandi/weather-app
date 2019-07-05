@@ -32,7 +32,7 @@ class ForecastDeserializer : JsonDeserializer<CityWeather> {
             val mainJson = forecastJson.getAsJsonObject("main")
             val weatherJson = forecastJson.getAsJsonArray("weather").get(0) as JsonObject
 
-            val temp = mainJson.get("temp").asDouble
+            val temp = mainJson.get("temp").asDouble - 273
             val humidity = mainJson.get("humidity").asInt
             val weather = weatherJson.get("main").asString
             val description = weatherJson.get("description").asString
