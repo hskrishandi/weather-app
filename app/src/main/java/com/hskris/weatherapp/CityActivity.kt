@@ -1,5 +1,7 @@
 package com.hskris.weatherapp
 
+import android.app.Activity
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -26,6 +28,10 @@ class CityActivity : AppCompatActivity() {
         recyclerViewChooseCity.adapter = CityAdapter(items)
 
     }
+
+    companion object {
+        val CITY_KEY = "CITY_KEY"
+    }
 }
 
 class CityAdapter(val items: List<City>) : RecyclerView.Adapter<CityAdapter.CityItem>(){
@@ -39,6 +45,15 @@ class CityAdapter(val items: List<City>) : RecyclerView.Adapter<CityAdapter.City
 
     override fun onBindViewHolder(holder: CityItem, position: Int) {
         holder.city.text = items[position].name
+
+        holder.itemView.setOnClickListener{
+            val intent = Intent()
+            intent.putExtra(CityActivity.CITY_KEY, items[position].id)
+
+            val activity = holder.itemView.context as Activity
+            activity.setResult(Activity.RESULT_OK, intent)
+            activity.finish()
+        }
     }
 
 

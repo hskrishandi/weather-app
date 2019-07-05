@@ -20,6 +20,7 @@ class ForecastActivity : AppCompatActivity() {
 
     private val manager = CityWeatherManager()
     var weathers: MutableList<CityWeather> = mutableListOf()
+    const val CHOOSE_CITY = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,7 +53,7 @@ class ForecastActivity : AppCompatActivity() {
 
         textViewChooseCity.setOnClickListener {
             val intent = Intent(this, CityActivity::class.java)
-            startActivity(intent)
+            startActivityForResult(intent, CHOOSE_CITY)
         }
 
     }
