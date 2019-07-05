@@ -18,14 +18,14 @@ import kotlinx.android.synthetic.main.activity_forecast.*
 import java.util.*
 import android.app.Activity
 import android.R.attr.data
-
+import android.util.Log
 
 
 class ForecastActivity : AppCompatActivity() {
 
     private val manager = CityWeatherManager()
     var weathers: MutableList<CityWeather> = mutableListOf()
-    val adapter = ForecastAdapter(mutableListOf<Forecast>())
+    private val adapter = ForecastAdapter(emptyList())
     private val CHOOSE_CITY = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -58,39 +58,37 @@ class ForecastActivity : AppCompatActivity() {
     }
 
     private fun fetchWeather(city: City){
-
         for(weather in weathers){
             if(weather.getId() == city.id){
-                adapter.updateForecast(weather.getForecasts())
+                Log.d("ForecastActivity", "${city.name}: reading from fetched dataset")
+                val forecasts = weather.getForecasts()
+                adapter.updateForecast(forecasts)
+                setWeatherInfo(city.name, forecasts[0])
                 return
             }
         }
 
         manager.fetchCityWeathers(city.id, object: ForecastCallback{
             override fun onGetForecast(forecasts: List<Forecast>) {
+                Log.d("ForecastActivity", "${city.name}: fetching from API")
                 val city = CityWeather(city.id, city.name, "ID")
 
-                val currentWeather = forecasts[0]
-
-                textViewBigTemp.text = currentWeather.temp.toInt().toString()
-
-                val cityText = "${city.name}, ${city.country}"
-                textViewCity.text = cityText
-
-                textViewDescription.text = currentWeather.description
-
-                setWeatherIcon(currentWeather.weather)
+                setWeatherInfo(city.name, forecasts[0])
 
                 city.addForecasts(forecasts)
                 weathers.add(city)
 
-                recyclerViewForecast.adapter = ForecastAdapter(forecasts)
+                adapter.updateForecast(forecasts)
             }
         })
     }
 
-    fun setWeatherIcon(weather: String){
-        when(weather){
+    fun setWeatherInfo(city: String, forecast: Forecast){
+        textViewBigTemp.text = forecast.temp.toInt().toString()
+        textViewCity.text = city
+        textViewDescription.text = forecast.description
+
+        when(forecast.weather){
             "Clouds" -> imageViewWeather.setImageResource(R.drawable.cloudy)
             "Rain" -> imageViewWeather.setImageResource(R.drawable.rainy)
             "Clear" -> imageViewWeather.setImageResource(R.drawable.clear)
