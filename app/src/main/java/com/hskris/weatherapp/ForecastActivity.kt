@@ -24,10 +24,24 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        supportActionBar?.hide()
+
         recyclerViewForecast.layoutManager = LinearLayoutManager(this)
         manager.fetchCityWeathers(1642911, object: ForecastCallback{
             override fun onGetForecast(forecasts: List<Forecast>) {
                 val city = CityWeather(1642911, "Jakarta", "ID")
+
+                val currentWeather = forecasts[0]
+
+                textViewBigTemp.text = currentWeather.temp.toInt().toString()
+
+                val cityText = "${city.name}, ${city.country}"
+                textViewCity.text = cityText
+
+                textViewDescription.text = currentWeather.description
+
+                setWeatherIcon(currentWeather.weather)
+
                 city.addForecasts(forecasts)
                 weathers.add(city)
 
@@ -35,6 +49,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
     }
+
+    fun setWeatherIcon(weather: String){
+        when(weather){
+            "Clouds" -> imageViewWeather.setImageResource(R.drawable.cloudy)
+            "Rain" -> imageViewWeather.setImageResource(R.drawable.rainy)
+            "Clear" -> imageViewWeather.setImageResource(R.drawable.clear)
+        }
+    }
+
 }
 
 class ForecastAdapter(val items: List<Forecast>) : RecyclerView.Adapter<ForecastAdapter.ForecastItem>(){
@@ -60,10 +83,10 @@ class ForecastAdapter(val items: List<Forecast>) : RecyclerView.Adapter<Forecast
         calendar.setTime(date)
         holder.day.text = calendar.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.LONG, Locale.US)?.toString()
 
-        val temp = (item.temp.toInt() - 273).toString() + " C"
+        val temp = item.temp.toInt().toString() + " C"
         holder.temp.text = temp
 
-        holder.desc.text = item.description
+        holder.desc.text = item.weather
     }
 
 
