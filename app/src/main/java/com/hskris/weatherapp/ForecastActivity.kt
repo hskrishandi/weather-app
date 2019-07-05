@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.hskris.weatherapp.data.CityWeatherManager
 import com.hskris.weatherapp.data.ForecastCallback
+import com.hskris.weatherapp.data.models.City
 import com.hskris.weatherapp.data.models.CityWeather
 import com.hskris.weatherapp.data.models.Forecast
 import kotlinx.android.synthetic.main.activity_forecast.*
@@ -20,7 +21,8 @@ class ForecastActivity : AppCompatActivity() {
 
     private val manager = CityWeatherManager()
     var weathers: MutableList<CityWeather> = mutableListOf()
-    const val CHOOSE_CITY = 1
+    val adapter = ForecastAdapter(mutableListOf<Forecast>())
+    private val CHOOSE_CITY = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -29,9 +31,29 @@ class ForecastActivity : AppCompatActivity() {
         supportActionBar?.hide()
 
         recyclerViewForecast.layoutManager = LinearLayoutManager(this)
-        manager.fetchCityWeathers(1642911, object: ForecastCallback{
+        recyclerViewForecast.adapter = adapter
+
+        textViewChooseCity.setOnClickListener {
+            val intent = Intent(this, CityActivity::class.java)
+            startActivityForResult(intent, CHOOSE_CITY)
+        }
+
+        fetchWeather(CityActivity.cityItems[0])
+
+    }
+
+    private fun fetchWeather(city: City){
+
+        for(weather in weathers){
+            if(weather.getId() == city.id){
+                adapter.updateForecast(weather.getForecasts())
+                return
+            }
+        }
+
+        manager.fetchCityWeathers(city.id, object: ForecastCallback{
             override fun onGetForecast(forecasts: List<Forecast>) {
-                val city = CityWeather(1642911, "Jakarta", "ID")
+                val city = CityWeather(city.id, city.name, "ID")
 
                 val currentWeather = forecasts[0]
 
@@ -50,12 +72,6 @@ class ForecastActivity : AppCompatActivity() {
                 recyclerViewForecast.adapter = ForecastAdapter(forecasts)
             }
         })
-
-        textViewChooseCity.setOnClickListener {
-            val intent = Intent(this, CityActivity::class.java)
-            startActivityForResult(intent, CHOOSE_CITY)
-        }
-
     }
 
     fun setWeatherIcon(weather: String){
@@ -68,9 +84,14 @@ class ForecastActivity : AppCompatActivity() {
 
 }
 
-class ForecastAdapter(val items: List<Forecast>) : RecyclerView.Adapter<ForecastAdapter.ForecastItem>(){
+class ForecastAdapter(var items: List<Forecast>) : RecyclerView.Adapter<ForecastAdapter.ForecastItem>(){
 
     private val calendar = Calendar.getInstance()
+
+    fun updateForecast(newItems: List<Forecast>) {
+        items = newItems
+        notifyDataSetChanged()
+    }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastItem {
         return ForecastItem(
