@@ -1,5 +1,6 @@
 package com.hskris.weatherapp
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -48,6 +49,12 @@ class ForecastActivity : AppCompatActivity() {
                 recyclerViewForecast.adapter = ForecastAdapter(forecasts)
             }
         })
+
+        textViewChooseCity.setOnClickListener {
+            val intent = Intent(this, CityActivity::class.java)
+            startActivity(intent)
+        }
+
     }
 
     fun setWeatherIcon(weather: String){
