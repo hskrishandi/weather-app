@@ -16,6 +16,10 @@ import com.hskris.weatherapp.data.models.CityWeather
 import com.hskris.weatherapp.data.models.Forecast
 import kotlinx.android.synthetic.main.activity_forecast.*
 import java.util.*
+import android.app.Activity
+import android.R.attr.data
+
+
 
 class ForecastActivity : AppCompatActivity() {
 
@@ -40,6 +44,17 @@ class ForecastActivity : AppCompatActivity() {
 
         fetchWeather(CityActivity.cityItems[0])
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(requestCode == CHOOSE_CITY){
+            if (resultCode == Activity.RESULT_OK) {
+                val city = data!!.getParcelableExtra<City>(CityActivity.CITY_KEY)
+                fetchWeather(city)
+            }
+        }
     }
 
     private fun fetchWeather(city: City){
