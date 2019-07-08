@@ -21,7 +21,8 @@
             android:id="@+id/textViewCity"
             android:textSize="10sp"
             android:textColor="@android:color/background_light"
-            app:layout_constraintTop_toBottomOf="@+id/textViewDescription" app:layout_constraintStart_toStartOf="@+id/textViewDescription"
+            app:layout_constraintTop_toBottomOf="@+id/textViewDescription"
+            app:layout_constraintStart_toStartOf="@+id/textViewDescription"
             app:layout_constraintEnd_toEndOf="@+id/textViewDescription"
     />
     <ImageView
