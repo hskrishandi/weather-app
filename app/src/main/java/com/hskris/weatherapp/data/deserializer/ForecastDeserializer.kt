@@ -1,6 +1,7 @@
 package com.hskris.weatherapp.data.deserializer
 
 import com.google.gson.*
+import com.hskris.weatherapp.data.models.City
 import java.lang.reflect.Type
 import com.hskris.weatherapp.data.models.CityWeather
 import com.hskris.weatherapp.data.models.Forecast
@@ -21,8 +22,11 @@ class ForecastDeserializer : JsonDeserializer<CityWeather> {
         val cityId = cityJson.get("id").asInt
         val cityName = cityJson.get("name").asString
         val cityCountry = cityJson.get("country").asString
+        val cityTimezone = cityJson.get("timezone").asLong
 
-        val cityWeather = CityWeather(cityId, cityName, cityCountry)
+        val city = City(cityId, cityName, cityCountry, cityTimezone)
+
+        val cityWeather = CityWeather(city)
 
         for(f in forecastJsonArray){
             val forecastJson = f as JsonObject
