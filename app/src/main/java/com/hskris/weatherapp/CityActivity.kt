@@ -28,7 +28,9 @@ class CityActivity : AppCompatActivity() {
         val CITY_KEY = "CITY_KEY"
         val cityItems = listOf(
             City(1642911, "Jakarta"),
-            City(1277333, "Bangalore")
+            City(1277333, "Bangalore"),
+            City(1819729, "Hong Kong"),
+            City(5128581, "New York")
         )
     }
 }
