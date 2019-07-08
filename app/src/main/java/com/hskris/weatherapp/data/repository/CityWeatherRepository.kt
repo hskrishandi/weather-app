@@ -1,4 +1,4 @@
-package com.hskris.weatherapp.data
+package com.hskris.weatherapp.data.repository
 
 import android.util.Log
 import com.hskris.weatherapp.data.api.Api

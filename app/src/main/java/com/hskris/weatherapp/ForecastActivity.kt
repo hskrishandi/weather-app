@@ -9,21 +9,20 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.hskris.weatherapp.data.CityWeatherManager
-import com.hskris.weatherapp.data.ForecastCallback
+import com.hskris.weatherapp.data.repository.ForecastCallback
 import com.hskris.weatherapp.data.models.City
 import com.hskris.weatherapp.data.models.CityWeather
 import com.hskris.weatherapp.data.models.Forecast
 import kotlinx.android.synthetic.main.activity_forecast.*
 import java.util.*
 import android.app.Activity
-import android.R.attr.data
 import android.util.Log
+import com.hskris.weatherapp.data.repository.CityWeatherRepository
 
 
 class ForecastActivity : AppCompatActivity() {
 
-    private val manager = CityWeatherManager()
+    private val cityWeatherRepo = CityWeatherRepository()
     var weathers: MutableList<CityWeather> = mutableListOf()
     private val adapter = ForecastAdapter(emptyList())
     private val CHOOSE_CITY = 1
@@ -68,7 +67,7 @@ class ForecastActivity : AppCompatActivity() {
             }
         }
 
-        manager.fetchCityWeathers(city.id, object: ForecastCallback{
+        cityWeatherRepo.fetchCityWeathers(city.id, object: ForecastCallback {
             override fun onGetForecast(forecasts: List<Forecast>) {
                 Log.d("ForecastActivity", "${city.name}: fetching from API")
                 val city = CityWeather(city.id, city.name, "")
