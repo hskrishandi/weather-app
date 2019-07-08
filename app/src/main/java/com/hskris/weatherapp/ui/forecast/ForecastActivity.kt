@@ -14,7 +14,10 @@ import android.util.Log
 import com.hskris.weatherapp.R
 import com.hskris.weatherapp.ui.city.CityActivity
 import com.hskris.weatherapp.data.repository.CityWeatherRepository
+import com.hskris.weatherapp.types.DayNightType
 import com.hskris.weatherapp.utils.CityWeatherUtils
+import java.text.SimpleDateFormat
+import java.util.*
 
 
 class ForecastActivity : AppCompatActivity() {
@@ -91,7 +94,20 @@ class ForecastActivity : AppCompatActivity() {
         }
 
         adapter.updateForecast(forecasts)
+    }
 
+    fun getDayNight(timezone: Long): DayNightType {
+        var unixtime = System.currentTimeMillis() / 1000L
+        unixtime += timezone
+
+        val calendar = Calendar.getInstance(TimeZone.getTimeZone("UTC"))
+        calendar.time = Date(unixtime*1000)
+        val hour = calendar.get(Calendar.HOUR_OF_DAY)
+
+        when(hour in 6..18) {
+            true -> return DayNightType.DAY
+            false -> return DayNightType.NIGHT
+        }
     }
 
 }
