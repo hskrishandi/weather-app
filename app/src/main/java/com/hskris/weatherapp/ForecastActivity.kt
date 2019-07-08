@@ -71,7 +71,7 @@ class ForecastActivity : AppCompatActivity() {
         manager.fetchCityWeathers(city.id, object: ForecastCallback{
             override fun onGetForecast(forecasts: List<Forecast>) {
                 Log.d("ForecastActivity", "${city.name}: fetching from API")
-                val city = CityWeather(city.id, city.name, "ID")
+                val city = CityWeather(city.id, city.name, "")
 
                 setWeatherInfo(city.name, forecasts[0])
 
