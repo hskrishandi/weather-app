@@ -1,4 +1,4 @@
-package com.hskris.weatherapp
+package com.hskris.weatherapp.ui.forecast
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -17,6 +17,8 @@ import kotlinx.android.synthetic.main.activity_forecast.*
 import java.util.*
 import android.app.Activity
 import android.util.Log
+import com.hskris.weatherapp.R
+import com.hskris.weatherapp.ui.city.CityActivity
 import com.hskris.weatherapp.data.repository.CityWeatherRepository
 
 

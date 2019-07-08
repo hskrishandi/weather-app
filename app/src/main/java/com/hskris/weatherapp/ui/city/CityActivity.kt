@@ -1,4 +1,4 @@
-package com.hskris.weatherapp
+package com.hskris.weatherapp.ui.city
 
 import android.app.Activity
 import android.content.Intent
@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.hskris.weatherapp.R
 import com.hskris.weatherapp.data.models.City
 import kotlinx.android.synthetic.main.activity_city.*
 
@@ -20,7 +21,8 @@ class CityActivity : AppCompatActivity() {
         setContentView(R.layout.activity_city)
 
         recyclerViewChooseCity.layoutManager = LinearLayoutManager(this)
-        recyclerViewChooseCity.adapter = CityAdapter(cityItems)
+        recyclerViewChooseCity.adapter =
+            CityAdapter(cityItems)
 
     }
 
@@ -37,7 +39,13 @@ class CityActivity : AppCompatActivity() {
 
 class CityAdapter(val items: List<City>) : RecyclerView.Adapter<CityAdapter.CityItem>(){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityItem {
-        return CityItem(LayoutInflater.from(parent.context).inflate(R.layout.city_row, parent, false))
+        return CityItem(
+            LayoutInflater.from(parent.context).inflate(
+                R.layout.city_row,
+                parent,
+                false
+            )
+        )
     }
 
     override fun getItemCount(): Int {

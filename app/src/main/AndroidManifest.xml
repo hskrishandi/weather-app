@@ -12,12 +12,12 @@
             android:roundIcon="@mipmap/ic_launcher_round"
             android:supportsRtl="true"
             android:theme="@style/AppTheme">
-        <activity android:name=".CityActivity">
+        <activity android:name="com.hskris.weatherapp.ui.city.CityActivity">
             <meta-data
                     android:name="android.support.PARENT_ACTIVITY"
-                    android:value=".ForecastActivity"/>
+                    android:value="com.hskris.weatherapp.ui.forecast.ForecastActivity"/>
         </activity>
-        <activity android:name=".ForecastActivity">
+        <activity android:name="com.hskris.weatherapp.ui.forecast.ForecastActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
