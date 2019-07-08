@@ -83,6 +83,13 @@ class ForecastActivity : AppCompatActivity() {
         val currentForecast = forecasts[0]
         val textCity = "${city.name}, ${city.country}"
 
+        val dayNight = getDayNight(city.timezone)
+
+        when(dayNight){
+            DayNightType.DAY -> forecastLayout.setBackgroundResource(R.drawable.day)
+            DayNightType.NIGHT -> forecastLayout.setBackgroundResource(R.drawable.night)
+        }
+
         textViewBigTemp.text = currentForecast.temp.toInt().toString()
         textViewCity.text = textCity
         textViewDescription.text = currentForecast.description
@@ -90,7 +97,11 @@ class ForecastActivity : AppCompatActivity() {
         when(currentForecast.weather){
             "Clouds" -> imageViewWeather.setImageResource(R.drawable.cloudy)
             "Rain" -> imageViewWeather.setImageResource(R.drawable.rainy)
-            "Clear" -> imageViewWeather.setImageResource(R.drawable.clear)
+            "Clear" ->
+                when(dayNight){
+                    DayNightType.DAY -> imageViewWeather.setImageResource(R.drawable.clear)
+                    DayNightType.NIGHT -> imageViewWeather.setImageResource(R.drawable.moon)
+                }
         }
 
         adapter.updateForecast(forecasts)
