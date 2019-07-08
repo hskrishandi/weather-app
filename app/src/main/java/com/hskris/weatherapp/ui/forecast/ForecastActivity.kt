@@ -20,7 +20,7 @@ import com.hskris.weatherapp.utils.CityWeatherUtils
 class ForecastActivity : AppCompatActivity() {
 
     private val cityWeatherRepo = CityWeatherRepository()
-    var weathers: MutableList<CityWeather> = mutableListOf()
+    var cityWeathers: MutableList<CityWeather> = mutableListOf()
     private val adapter = ForecastAdapter(emptyList())
     private val CHOOSE_CITY = 1
 
@@ -54,10 +54,10 @@ class ForecastActivity : AppCompatActivity() {
     }
 
     private fun fetchWeather(city: City){
-        for(weather in weathers){
-            if(weather.city.id == city.id){
+        for(cw in cityWeathers){
+            if(cw.city.id == city.id){
                 Log.d("ForecastActivity", "${city.name}: reading from fetched dataset")
-                setWeatherDisplay(weather.city, weather.getForecasts())
+                setWeatherDisplay(cw.city, cw.getForecasts())
                 return
             }
         }
@@ -68,7 +68,7 @@ class ForecastActivity : AppCompatActivity() {
 
                 val forecasts = CityWeatherUtils.getFiveDaysForecast(cityWeather)
 
-                weathers.add(cityWeather)
+                cityWeathers.add(cityWeather)
 
                 setWeatherDisplay(cityWeather.city, forecasts)
             }
