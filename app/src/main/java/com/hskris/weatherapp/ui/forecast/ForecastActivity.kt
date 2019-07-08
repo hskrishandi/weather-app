@@ -14,6 +14,7 @@ import android.util.Log
 import com.hskris.weatherapp.R
 import com.hskris.weatherapp.ui.city.CityActivity
 import com.hskris.weatherapp.data.repository.CityWeatherRepository
+import com.hskris.weatherapp.utils.CityWeatherUtils
 
 
 class ForecastActivity : AppCompatActivity() {
@@ -54,40 +55,43 @@ class ForecastActivity : AppCompatActivity() {
 
     private fun fetchWeather(city: City){
         for(weather in weathers){
-            if(weather.getId() == city.id){
+            if(weather.city.id == city.id){
                 Log.d("ForecastActivity", "${city.name}: reading from fetched dataset")
-                val forecasts = weather.getForecasts()
-                adapter.updateForecast(forecasts)
-                setWeatherInfo(city.name, forecasts[0])
+                setWeatherDisplay(weather.city, weather.getForecasts())
                 return
             }
         }
 
         cityWeatherRepo.fetchCityWeathers(city.id, object: ForecastCallback {
-            override fun onGetForecast(forecasts: List<Forecast>) {
+            override fun onGetForecast(cityWeather: CityWeather) {
                 Log.d("ForecastActivity", "${city.name}: fetching from API")
-                val city = CityWeather(city.id, city.name, "")
 
-                setWeatherInfo(city.name, forecasts[0])
+                val forecasts = CityWeatherUtils.getFiveDaysForecast(cityWeather)
 
-                city.addForecasts(forecasts)
-                weathers.add(city)
+                weathers.add(cityWeather)
 
-                adapter.updateForecast(forecasts)
+                setWeatherDisplay(cityWeather.city, forecasts)
             }
         })
     }
 
-    fun setWeatherInfo(city: String, forecast: Forecast){
-        textViewBigTemp.text = forecast.temp.toInt().toString()
-        textViewCity.text = city
-        textViewDescription.text = forecast.description
+    fun setWeatherDisplay(city: City, forecasts: List<Forecast>){
 
-        when(forecast.weather){
+        val currentForecast = forecasts[0]
+        val textCity = "${city.name}, ${city.country}"
+
+        textViewBigTemp.text = currentForecast.temp.toInt().toString()
+        textViewCity.text = textCity
+        textViewDescription.text = currentForecast.description
+
+        when(currentForecast.weather){
             "Clouds" -> imageViewWeather.setImageResource(R.drawable.cloudy)
             "Rain" -> imageViewWeather.setImageResource(R.drawable.rainy)
             "Clear" -> imageViewWeather.setImageResource(R.drawable.clear)
         }
+
+        adapter.updateForecast(forecasts)
+
     }
 
 }
