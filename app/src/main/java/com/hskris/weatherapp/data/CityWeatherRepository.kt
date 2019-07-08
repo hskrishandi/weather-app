@@ -8,7 +8,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CityWeatherManager {
+class CityWeatherRepository {
 
     private val cityId = listOf(1642911, 1277333)
     private val api = Api.getInstance()
